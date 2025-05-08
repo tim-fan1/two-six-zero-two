@@ -22,7 +22,8 @@ module sequence_detector_fsm_testbench();
 	end
 
 	initial begin
-		#130 w <= 1'b1;
+		w <= 1'b0;
+		#150 w <= 1'b1;
 		#50 w <= 1'b0;
 		#200 w <= 1'b1;
 		#250 w <= 1'b0;
