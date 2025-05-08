@@ -20,7 +20,7 @@ module sequence_detector_fsm(w, z, clock, resetnot, currstate, nextstate, HEX0, 
 		.d(nextstate), .q(currstate), .clock(clock), .resetnot(resetnot)
 	);
 
-	// Seperate out the computation of what z should be on posedge clock.
+	// Seperate out the computation of z. Note that this is also UNCLOCKED!
 	sequence_detector_fsm_output sequence_detector_output(
 		.currstate(currstate), .z(z)
 	);
