@@ -22,25 +22,25 @@ module sequence_detector_fsm_testbench();
 	end
 
 	initial begin
-		w <= 1'b0;
-		#150 w <= 1'b1;
+		// w <= 1'b0;
+		#130 w <= 1'b1;
 		#50 w <= 1'b0;
 		#200 w <= 1'b1;
 		#250 w <= 1'b0;
 	end
 
-	wire [1:0] SW;
-	wire [0:0] KEY;
-	wire [6:0] HEX0;
-	wire [9:0] LEDR;
+	// wire [1:0] SW;
+	// wire [0:0] KEY;
+	// wire [6:0] HEX0;
+	// wire [9:0] LEDR;
 
-	assign SW[1] = w;
-	assign SW[0] = resetnot;
-	assign KEY[0] = clock;
+	// assign SW[1] = w;
+	// assign SW[0] = resetnot;
+	// assign KEY[0] = clock;
 
-	sequence_detector_fsm_instantiate sequence_detector_instantiate(.SW(SW), .KEY(KEY), .HEX0(HEX0), .LEDR(LEDR));
+	// sequence_detector_fsm_instantiate sequence_detector_instantiate(.SW(SW), .KEY(KEY), .HEX0(HEX0), .LEDR(LEDR));
 
-	// sequence_detector_fsm sequence_detector(.w(w), .z(z), .clock(clock), .resetnot(resetnot), .currstate(currstate), .nextstate(nextstate));
+	sequence_detector_fsm sequence_detector(.w(w), .z(z), .clock(clock), .resetnot(resetnot), .currstate(currstate), .nextstate(nextstate));
 
 	initial begin
 		$dumpfile("testbench.vcd");

@@ -22,7 +22,7 @@ module sequence_detector_fsm(w, z, clock, resetnot, currstate, nextstate, HEX0, 
 
 	// Seperate out the computation of what z should be on posedge clock.
 	sequence_detector_fsm_output sequence_detector_output(
-		.currstate(currstate), .w(w), .clock(clock), .resetnot(resetnot), .z(z)
+		.currstate(currstate), .z(z)
 	);
 
 	assign LEDR = (z == 1'b0) ? 0 : ~0; // Turn on all LEDS on z = 1.
