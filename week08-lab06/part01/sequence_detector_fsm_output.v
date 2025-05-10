@@ -18,12 +18,12 @@ module sequence_detector_fsm_output(currstate, w, z);
 			// 0000.
 			B: z <= 1'b0;
 			C: z <= 1'b0;
-			D: if (w == 1'b0) z <= 1'b1; else z <= 1'b0; // Will be transition to success!
+			D: z <= 1'b0;
 			E: if (w == 1'b0) z <= 1'b1; else z <= 1'b0;
 			// 1111.
 			F: z <= 1'b0;
 			G: z <= 1'b0;
-			H: if (w == 1'b0) z <= 1'b0; else z <= 1'b1; // Will be transition to success!
+			H: z <= 1'b0;
 			I: if (w == 1'b0) z <= 1'b0; else z <= 1'b1; 
 			// Don't cares.
 			default: z <= 1'b0;
