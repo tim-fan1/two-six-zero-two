@@ -1,12 +1,16 @@
-// module sequence_detector_fsm_instantiate(SW, KEY, HEX0, LEDR);
-// 	input  [1:0] SW;
-// 	input  [0:0] KEY;
-// 	output [6:0] HEX0;
-// 	output [9:0] LEDR;
+module programmable_sequence_detector_fsm_instantiate(SW, KEY, HEX0, LEDR);
+	input  [9:0] SW; // w.
+	input  [2:0] KEY; // clock and save and resetnot.
+	output [6:0] HEX0; // state.
+	output [6:0] HEX2; // count.
+	output [9:0] LEDR; // output.
 
-// 	sequence_detector_fsm sequence_detector(.w(SW[1]),
-// 	                                        .resetnot(SW[0]),
-// 	                                        .clock(KEY[0]),
-// 	                                        .HEX0(HEX0),
-// 	                                        .LEDR(LEDR));
-// endmodule
+	programmable_sequence_detector_fsm programmable_sequence_detector(.w(SW[0]),
+	                                                                  .n_in(SW[9:6]),
+	                                                                  .clock(KEY[0]),
+	                                                                  .save(KEY[1]),
+	                                                                  .resetnot(KEY[2]),
+	                                                                  .HEX0(HEX0),
+	                                                                  .HEX2(HEX2),
+	                                                                  .LEDR(LEDR));
+endmodule

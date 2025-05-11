@@ -1,4 +1,4 @@
-module programmable_sequence_detector_fsm(save, n_in, w, z, clock, resetnot, HEX0, LEDR
+module programmable_sequence_detector_fsm(save, n_in, w, z, clock, resetnot, HEX0, HEX2, LEDR
 	, n_out, counter_resetnot, counter_enable, currstate, nextstate, count // don't need to be ports.
 	);
 	input        save, w, clock, resetnot;
@@ -6,6 +6,7 @@ module programmable_sequence_detector_fsm(save, n_in, w, z, clock, resetnot, HEX
 	output       z;
 
 	output [6:0] HEX0;
+	output [6:0] HEX2;
 	output [9:0] LEDR;
 
 	// Internal wires. Make these visible (output wires) for debugging.
@@ -34,5 +35,6 @@ module programmable_sequence_detector_fsm(save, n_in, w, z, clock, resetnot, HEX
 	);
 
 	assign LEDR = (z == 1'b0) ? 0 : ~0; // Turn on all LEDS on z = 1.
-	hex_to_sevenseg_decoder hex(.D(currstate), .Q(HEX0));
+	hex_to_sevenseg_decoder hex0(.D(currstate), .Q(HEX0));
+	hex_to_sevenseg_decoder hex2(.D(count), .Q(HEX2));
 endmodule
