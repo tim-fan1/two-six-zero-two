@@ -4,7 +4,7 @@ module programmable_sequence_detector_fsm_testbench();
 	reg [3:0] n_in;
 	wire z;
 	wire [3:0] currstate, nextstate, count, n_out;
-	wire counter_enable, counter_resetnot;
+	wire counter_enable, counter_resetnot_sync;
 
 	initial begin
 		w <= 1'b0;
@@ -31,12 +31,14 @@ module programmable_sequence_detector_fsm_testbench();
 	end
 
 	initial begin
-		// w <= 1'b0;
 		#1250 w <= 1'b1;
 		#1250 w <= 1'b0;
-		// #50 w <= 1'b0;
-		// #200 w <= 1'b1;
-		// #250 w <= 1'b0;
+	end
+
+	initial begin
+		#1350 n_in <= 4'b1111;
+		#5 save <= 1'b1; 
+		#5 save <= 1'b0;
 	end
 
 	// wire [1:0] SW;
@@ -53,7 +55,7 @@ module programmable_sequence_detector_fsm_testbench();
 	programmable_sequence_detector_fsm programmable_sequence_detector(
 		.w(w), .save(save), .n_in(n_in), .n_out(n_out), .z(z), .clock(clock), .resetnot(resetnot), 
 		.currstate(currstate), .nextstate(nextstate), .count(count),
-		.counter_enable(counter_enable), .counter_resetnot(counter_resetnot)
+		.counter_enable(counter_enable), .counter_resetnot_sync(counter_resetnot_sync)
 	);
 
 	initial begin

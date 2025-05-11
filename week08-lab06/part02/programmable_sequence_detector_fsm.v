@@ -1,5 +1,5 @@
 module programmable_sequence_detector_fsm(save, n_in, w, z, clock, resetnot, HEX0, HEX2, LEDR
-	, n_out, counter_resetnot, counter_enable, currstate, nextstate, count // don't need to be ports.
+	, n_out, counter_resetnot_sync, counter_enable, currstate, nextstate, count // don't need to be ports.
 	);
 	input        save, w, clock, resetnot;
 	input  [3:0] n_in;
@@ -11,12 +11,12 @@ module programmable_sequence_detector_fsm(save, n_in, w, z, clock, resetnot, HEX
 
 	// Internal wires. Make these visible (output wires) for debugging.
 	output [3:0] currstate, nextstate, count, n_out;
-	output       counter_enable, counter_resetnot;
+	output       counter_enable, counter_resetnot_sync;
 
 	// Unclocked combinational modules.
 	programmable_sequence_detector_fsm_comb_next comb_next(
 		.w(w), .count(count), .n(n_out), .currstate(currstate), .nextstate(nextstate),
-		.counter_resetnot(counter_resetnot), .counter_enable(counter_enable)
+		.counter_resetnot_sync(counter_resetnot_sync), .counter_enable(counter_enable)
 	);
 	programmable_sequence_detector_fsm_comb_output comb_output(
 		.currstate(currstate), .z(z)
@@ -28,7 +28,7 @@ module programmable_sequence_detector_fsm(save, n_in, w, z, clock, resetnot, HEX
 	);
 	programmable_sequence_detector_fsm_reg_counter reg_counter(
 		.clock(clock), .counter_enable(counter_enable), .q(count), 
-		.resetnot(resetnot), .counter_resetnot_sync(counter_resetnot)
+		.resetnot(resetnot), .counter_resetnot_sync(counter_resetnot_sync)
 	);
 	programmable_sequence_detector_fsm_reg_n reg_n(
 		.save(save), .resetnot(resetnot), .d(n_in), .q(n_out)
