@@ -1,16 +1,17 @@
 `timescale 1ns / 1ps
 module programmable_sequence_detector_fsm_testbench();
-	reg w, clock, resetnot;
-	reg [3:0] n;
+	reg w, clock, resetnot, save;
+	reg [3:0] n_in;
 	wire z;
-	wire [3:0] currstate, nextstate, count;
+	wire [3:0] currstate, nextstate, count, n_out;
 	wire counter_enable, counter_resetnot;
 
 	initial begin
 		w <= 1'b0;
 		clock <= 1'b0;
 		resetnot <= 1'b1;
-		n <= 4'b0110;
+		save <= 1'b0;
+		n_in <= 4'b1110;
 	end
 
 	initial begin 
@@ -18,7 +19,11 @@ module programmable_sequence_detector_fsm_testbench();
 		// posedge of clock.
 		#5 resetnot <= 1'b0;
 		#5 resetnot <= 1'b1;
-		#160 n <= 4'b1110;
+		#5 save <= 1'b1;
+		#5 save <= 1'b0;
+		#160 n_in <= 4'b0110;
+		#300 save <= 1'b1;
+		#5 save <= 1'b0;
 	end
 
 	always begin 
@@ -46,7 +51,7 @@ module programmable_sequence_detector_fsm_testbench();
 	// sequence_detector_fsm_instantiate sequence_detector_instantiate(.SW(SW), .KEY(KEY), .HEX0(HEX0), .LEDR(LEDR));
 
 	programmable_sequence_detector_fsm programmable_sequence_detector(
-		.w(w), .n(n), .z(z), .clock(clock), .resetnot(resetnot), 
+		.w(w), .save(save), .n_in(n_in), .n_out(n_out), .z(z), .clock(clock), .resetnot(resetnot), 
 		.currstate(currstate), .nextstate(nextstate), .count(count),
 		.counter_enable(counter_enable), .counter_resetnot(counter_resetnot)
 	);

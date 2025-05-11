@@ -14,8 +14,8 @@ module programmable_sequence_detector_fsm_comb_next(w, count, n, currstate, next
 			A: nextstate <= (w == 1'b0) ? B : C; 
 			B: nextstate <= (w == 1'b0) ? ((count < n - 1) ? B : D) : C;
 			C: nextstate <= (w == 1'b0) ? B : ((count < n - 1) ? C : E);
-			D: nextstate <= (w == 1'b0) ? D : C; 
-			E: nextstate <= (w == 1'b0) ? B : E; 
+			D: nextstate <= (w == 1'b0) ? ((count < n - 1) ? B : D) : C; 
+			E: nextstate <= (w == 1'b0) ? B : ((count < n - 1) ? C : E); 
 			default: nextstate <= A;
 		endcase
 	end
