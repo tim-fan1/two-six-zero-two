@@ -10,7 +10,7 @@ module onesecondclock_using50megahertzclock(clock, Q);
 	always @(posedge clock) begin
 		twentysixbit_register <= twentysixbit_register + 1;
 		// TODO: reset back to zero.
-		if (twentysixbit_register == 26'b10111110101111000010000000) Q <= 1;
+		if (twentysixbit_register == 26'b10111110101111000010000000) begin Q <= 1; twentysixbit_register <= 0; end
 		else Q <= 0;
 	end
 endmodule
