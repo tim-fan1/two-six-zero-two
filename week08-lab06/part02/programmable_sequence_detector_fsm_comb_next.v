@@ -9,6 +9,11 @@ module programmable_sequence_detector_fsm_comb_next(w, count, n, currstate, next
 	output reg [3:0] nextstate;
 	output reg       counter_resetnot_sync, counter_enable;
 
+	// TODO: Turn into simple three-state MEALY MACHINE, where 
+	//       output is not dependent on only currstate --- there
+	//       is no "final" state like there is here, being D/E.
+	//       In other words, make comb_out do the computation of,
+	//       am I in a final "state"? Is count == n?
 	always @(currstate, w, n, count) begin
 		case (currstate)
 			A: nextstate <= (w == 1'b0) ? B : C; 
