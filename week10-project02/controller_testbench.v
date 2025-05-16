@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 module controller_testbench();
-	reg clock, resetnot, start;
+	reg clock, resetnot;
 	reg [7:0] instruction;
 
 	wire [3:0] currstate; 
@@ -10,12 +10,11 @@ module controller_testbench();
 	initial begin
 		clock <= 1'b0;
 		resetnot <= 1'b1;
-		start <= 1'b0;
 		instruction <= 0;
 	end
 
 	always begin 
-		#100 clock <= ~clock;
+		#50 clock <= ~clock;
 	end
 
 	initial begin
@@ -24,14 +23,14 @@ module controller_testbench();
 		#5 resetnot = 1'b1;
 
 		// Load instruction with ADD instruction.
-		#5 instruction <= 8'b10110001; // Only care about opcode for now.
-		#5 start <= 1'b1; // And send signal that instruction is ready!
+		#5 instruction <= 8'b10110001;
+
+		#500 instruction <= 8'b11010111;
 
 		// Now watch the magic happen in currstate wires?
 	end
 
-	controller controller(.start(start), 
-		                    .clock(clock), 
+	controller controller(.clock(clock), 
 		                    .resetnot(resetnot), 
 		                    .instruction(instruction), 
 		                    .currstate(currstate), 
@@ -39,10 +38,10 @@ module controller_testbench();
 		                    .rout(rout),
 		                    .ren(ren));
 
-	initial begin
-		$dumpfile("testbench.vcd");
-		$dumpvars(0, controller_testbench);
-		#10000
-		$finish;
-	end
+	// initial begin
+	// 	$dumpfile("controller_testbench.vcd");
+	// 	$dumpvars(0, controller_testbench);
+	// 	#10000
+	// 	$finish;
+	// end
 endmodule

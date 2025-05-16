@@ -5,7 +5,7 @@ module controller_regstate(d, q, clock, resetnot);
 
 	always @(posedge clock, negedge resetnot) begin
 		if (resetnot == 1'b0)
-			q <= 4'b0000;
+			q <= 0;
 		else 
 			q <= d;
 	end

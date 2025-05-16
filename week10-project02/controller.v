@@ -1,10 +1,39 @@
-module controller(clock, resetnot, start, instruction, currstate, nextstate, rout, ren);
-	input clock, resetnot, start;
+module controller(clock, resetnot, instruction, rout, ren, addxor, increment
+	, currstate, nextstate
+);
+	input clock, resetnot;
+
+	// Received from datapath.
 	input [7:0] instruction;
 
-	output [3:0] currstate, nextstate;
+	// Send to datapath.
 	output [15:0] rout, ren;
-	controller_combnext combnext(.currstate(currstate), .nextstate(nextstate), .start(start), .instruction(instruction));
-	controller_combout combout(.currstate(currstate), .instruction(instruction), .rout(rout), .ren(ren));
-	controller_regstate regstate(.d(nextstate), .q(currstate), .clock(clock), .resetnot(resetnot));
+	output addxor;
+
+	// Send to program counter.
+	output increment;
+
+	output [3:0] currstate, nextstate;
+	controller_combnext combnext(
+		.currstate(currstate), 
+		.instruction(instruction),
+
+		.nextstate(nextstate)
+	);
+	controller_combout combout(
+		.currstate(currstate), 
+		.instruction(instruction), 
+
+		.rout(rout), 
+		.ren(ren),
+		.addxor(addxor),
+		.increment(increment)
+	);
+	controller_regstate regstate(
+		.d(nextstate), 
+		.q(currstate), 
+
+		.clock(clock), 
+		.resetnot(resetnot)
+	);
 endmodule
