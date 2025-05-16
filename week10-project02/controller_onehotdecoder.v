@@ -10,6 +10,7 @@ module controller_onehotdecoder(d, q);
 		R7 = 1 << 7,
 		G = 1 << 8,
 		A = 1 << 9,
+		EXTERN = 1 << 10,
 		UNUSED = 1 << 15;
 	input [3:0] d;
 	output reg [15:0] q;
@@ -25,6 +26,7 @@ module controller_onehotdecoder(d, q);
 		4'b0111: q <= R7;
 		4'b1000: q <= G;
 		4'b1001: q <= A;
+		4'b1010: q <= EXTERN;
 		default: q <= UNUSED;
 		endcase
 	end

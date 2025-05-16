@@ -1,6 +1,4 @@
-module controller(clock, resetnot, instruction, rout, ren, addxor, increment
-	, currstate, nextstate
-);
+module controller(clock, resetnot, instruction, rout, ren, addxor, increment);
 	input clock, resetnot;
 
 	// Received from datapath.
@@ -13,7 +11,7 @@ module controller(clock, resetnot, instruction, rout, ren, addxor, increment
 	// Send to program counter.
 	output increment;
 
-	output [3:0] currstate, nextstate;
+	wire [3:0] currstate, nextstate;
 	controller_combnext combnext(
 		.currstate(currstate), 
 		.instruction(instruction),

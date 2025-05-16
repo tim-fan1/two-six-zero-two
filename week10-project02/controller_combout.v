@@ -9,8 +9,8 @@ module controller_combout(currstate, instruction, rout, ren, addxor, increment);
 		EXEC_M = 4'b0110, // Move.
 		ERROR = 4'b1111; // UNUSED.
 	parameter [1:0]
-		LOAD = 2'b00, // Opcodes.
-		MOVE = 2'b01,
+		MOVE = 2'b00, // Opcodes.
+		LOAD = 2'b01,
 		ADD = 2'b10,
 		XOR = 2'b11;
 	input [3:0] currstate;
@@ -29,6 +29,8 @@ module controller_combout(currstate, instruction, rout, ren, addxor, increment);
 		EXEC_AX1: _rout <= { 1'b0, instruction[5:3] }; // RXout.
 		EXEC_AX2: _rout <= { 1'b0, instruction[2:0] }; // RYout.
 		EXEC_AX3: _rout <= 4'b1000; // Gout.
+		EXEC_L: _rout <= 4'b1010; // EXTERN.
+		EXEC_M: _rout <= { 1'b0, instruction[2:0] }; // RYout
 		default: _rout <= 4'b1111;
 		endcase
 	end
@@ -36,7 +38,9 @@ module controller_combout(currstate, instruction, rout, ren, addxor, increment);
 		case (currstate)
 		EXEC_AX1: _ren <= 4'b1001; // Aen.
 		EXEC_AX2: _ren <= 4'b1000; // Gen.
-		EXEC_AX3: _ren <= { 1'b0, instruction[5:3] }; // Rxin.
+		EXEC_AX3: _ren <= { 1'b0, instruction[5:3] }; // RXin.
+		EXEC_L: _ren <= { 1'b0, instruction[5:3] }; // RXin.
+		EXEC_M: _ren <= { 1'b0, instruction[5:3] }; // RXin.
 		default: _ren <= 4'b1111;
 		endcase
 	end

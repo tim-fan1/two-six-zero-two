@@ -9,8 +9,8 @@ module controller_combnext(currstate, nextstate, instruction);
 		EXEC_M = 4'b0110, // Move.
 		ERROR = 4'b1111; // UNUSED.
 	parameter [1:0]
-		LOAD = 2'b00, // Opcodes.
-		MOVE = 2'b01,
+		MOVE = 2'b00, // Opcodes.
+		LOAD = 2'b01,
 		ADD = 2'b10,
 		XOR = 2'b11;
 	input [3:0] currstate;
@@ -23,8 +23,8 @@ module controller_combnext(currstate, nextstate, instruction);
 	always @(currstate) begin
 		case (currstate)
 		FETCH: nextstate <= DECODE;
-		DECODE: nextstate <= (opcode == LOAD) ? EXEC_L : // What operation to execute?
-		                     (opcode == MOVE) ? EXEC_M : 
+		DECODE: nextstate <= (opcode == MOVE) ? EXEC_M : // What operation to execute?
+		                     (opcode == LOAD) ? EXEC_L : 
 		                     (opcode == ADD) ? EXEC_AX1 :
 		                     (opcode == XOR) ? EXEC_AX1 : 
 		                     ERROR;

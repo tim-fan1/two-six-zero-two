@@ -4,7 +4,6 @@ module processor(clock, resetnot
 	input clock, resetnot;
 	output addxor, increment;
 	output reg [7:0] instruction;
-	output [2:0] instruction_address;
 
 	output [15:0] rout, ren;
 
@@ -37,35 +36,32 @@ module processor(clock, resetnot
 		.increment(increment)
 	);
 
-	reg [1:0] program_counter;
-	initial program_counter = 0;
-	always @(program_counter) begin
-		case (program_counter)
-		2'b00: instruction <= 8'b10110001;
-		2'b01: instruction <= 8'b11010111;
-		2'b10: instruction <= 8'b00000101;
-		2'b11: instruction <= 8'b01010110;
-		endcase
-	end
+	// TEMP. Hard-coding hard-coding program.
+	//
+	// Program counter.
+	reg [3:0] program_counter;
+	initial program_counter = ~0; // Start at end, so that on first
+	                              // posedge, loops back to start.
 	always @(posedge increment)
 		program_counter <= program_counter + 1;
 
-	// program_counter _program_counter(
-	// 	.clock(clock),
-	// 	.resetnot(resetnot),
-
-	// 	// Received from controller.
-	// 	.increment(increment),
-
-	// 	// Send to instruction memory.
-	// 	.instruction_address(instruction_address)
-	// );
-
-	// instruction_memory _instruction_memory(
-	// 	// Received from program counter.
-	// 	.instruction_address(instruction_address),
-
-	// 	// Send instruction at program counter, to controller and datapath.
-	// 	.instruction(instruction)
-	// );
+	// Instruction memory.
+	always @(program_counter) begin
+		case (program_counter)
+		4'b0000: instruction <= 8'b10110001;
+		4'b0001: instruction <= 8'b11010111;
+		4'b0010: instruction <= 8'b00000101;
+		4'b0011: instruction <= 8'b01010110;
+		4'b0100: instruction <= 8'b01011111;
+		4'b0101: instruction <= 8'b11001111;
+		4'b0110: instruction <= 8'b10001101;
+		4'b0111: instruction <= 8'b11001101;
+		4'b1000: instruction <= 8'b00001101;
+		4'b1001: instruction <= 8'b00000101;
+		4'b1010: instruction <= 8'b00000001;
+		4'b1011: instruction <= 8'b11001100;
+		default: instruction <= 8'b00000000; // essentially nop, 
+		                                     // move r0 to r0.
+		endcase
+	end
 endmodule

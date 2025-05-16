@@ -33,8 +33,8 @@ module controller_testbench();
 	controller controller(.clock(clock), 
 		                    .resetnot(resetnot), 
 		                    .instruction(instruction), 
-		                    .currstate(currstate), 
-		                    .nextstate(nextstate),
+		                    // .currstate(currstate), 
+		                    // .nextstate(nextstate),
 		                    .rout(rout),
 		                    .ren(ren));
 
