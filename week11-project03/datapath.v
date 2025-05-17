@@ -46,7 +46,7 @@ module datapath(clock, resetnot, rout, ren, addxor, increment, instruction
 		_G: bus <= G;
 		_A: bus <= A;
 		_EXTERN: bus <= EXTERN;
-		_UNUSED: bus <= 0;
+		default: bus <= 0;
 		endcase
 	end
 
@@ -64,7 +64,7 @@ module datapath(clock, resetnot, rout, ren, addxor, increment, instruction
 		_G: G <= alu;
 		_A: A <= bus;
 		_EXTERN: EXTERN <= bus;
-		_UNUSED: bus <= bus;
+		default: bus <= bus;
 		endcase
 	end
 
