@@ -48,7 +48,7 @@ module datapath(clock, resetnot, rout, ren, addxor, increment, instruction
 	// TEMP. Hard-coding hard-coding program.
 	//
 	// Program counter.
-	reg [3:0] program_counter;
+	reg [8:0] program_counter;
 	initial program_counter = ~0; // Start at end, so that on first
 	                              // posedge, loops back to start.
 	always @(posedge increment)
@@ -57,21 +57,38 @@ module datapath(clock, resetnot, rout, ren, addxor, increment, instruction
 	// Instruction memory.
 	always @(program_counter) begin
 		case (program_counter)
-		4'b0000: instruction <= 8'b01000001; // load $0 01
-		4'b0001: instruction <= 8'b01001010; // load $1 10
-		4'b0010: instruction <= 8'b10000001; // add $0 $1
-		4'b0011: instruction <= 8'b10000001; // add $0 $1
-		4'b0100: instruction <= 8'b10000001; // ...
-		4'b0101: instruction <= 8'b10000001;
-		4'b0110: instruction <= 8'b10000001;
-		4'b0111: instruction <= 8'b10000001;
-		4'b1000: instruction <= 8'b10000001;
-		4'b1001: instruction <= 8'b10000001;
-		4'b1010: instruction <= 8'b10000001;
-		4'b1011: instruction <= 8'b10000001;
-		4'b1100: instruction <= 8'b10000001;
-		4'b1101: instruction <= 8'b10000001;
-		4'b1110: instruction <= 8'b10000001;
+		0: instruction <= 8'b01000001; // load $0 001
+		1: instruction <= 8'b01001011; // load $1 011
+		2: instruction <= 8'b01010111; // load $2 111
+		3: instruction <= 8'b01011011; // load $3 011
+		4: instruction <= 8'b01100111; // load $4 111
+		5: instruction <= 8'b01101101; // load $5 101
+		6: instruction <= 8'b01110001; // load $6 001
+		7: instruction <= 8'b01111100; // load $7 100
+		8: instruction <= 8'b10000001; // ...
+		9: instruction <= 8'b10000001; // ...
+		10: instruction <= 8'b10000001;
+		11: instruction <= 8'b10000001;
+		12: instruction <= 8'b10000001;
+		13: instruction <= 8'b10000001;
+		14: instruction <= 8'b10000001;
+		15: instruction <= 8'b10000001;
+		16: instruction <= 8'b10000001;
+		17: instruction <= 8'b10000001;
+		18: instruction <= 8'b10000001;
+		19: instruction <= 8'b10000001;
+		20: instruction <= 8'b10000001;
+		21: instruction <= 8'b10000001;
+		22: instruction <= 8'b10000001;
+		23: instruction <= 8'b10000001;
+		24: instruction <= 8'b10000001;
+		25: instruction <= 8'b10000001;
+		26: instruction <= 8'b10000001;
+		27: instruction <= 8'b10000001;
+		28: instruction <= 8'b10000001;
+		29: instruction <= 8'b10000001;
+		30: instruction <= 8'b10000001;
+		31: instruction <= 8'b10000001;
 		default: instruction <= 8'b00000000; // essentially nop, 
 		                                     // move r0 to r0.
 		endcase
