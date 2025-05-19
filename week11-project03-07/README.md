@@ -9,3 +9,9 @@ Project Part 4 -- Datapath, that receives control signals from Controller.
 
 Project Part 5 -- Integration.
 - Show your FSM and Datapath can work together to execute a simple program that is specified in your testbench
+
+Project Part 6 -- Four operations in simulation.
+
+- Show basic operations work
+
+Project Part 7 -- Processor consists of at least 8 16-bit registers
