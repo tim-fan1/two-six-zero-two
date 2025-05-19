@@ -1,19 +1,6 @@
 module datapath(clock, resetnot, rout, ren, addxor, increment, instruction
 	, bus, R0, R1, R2, R3, R4, R5, R6, R7, G, A, EXTERN, alu
 );
-	parameter [15:0]
-		_R0 = 1 << 0,
-		_R1 = 1 << 1,
-		_R2 = 1 << 2,
-		_R3 = 1 << 3,
-		_R4 = 1 << 4,
-		_R5 = 1 << 5,
-		_R6 = 1 << 6,
-		_R7 = 1 << 7,
-		_G = 1 << 8,
-		_A = 1 << 9,
-		_EXTERN = 1 << 10,
-		_UNUSED = 1 << 15;
 	input clock, resetnot, addxor, increment;
 	input [15:0] rout, ren;
 
@@ -21,52 +8,42 @@ module datapath(clock, resetnot, rout, ren, addxor, increment, instruction
 	output reg [7:0] instruction;
 
 	// The rest are internal wires, made viewable for debugging.
-	output reg [15:0] bus; 
-	output reg [15:0] R0, R1, R2, R3, R4, R5, R6, R7, G, A, EXTERN;
-	output [15:0] alu;
+	output tri [15:0] bus; 
+	output wire [15:0] R0, R1, R2, R3, R4, R5, R6, R7, G, A, EXTERN;
+	output wire [15:0] alu;
 
 	// Load data onto EXTERN wire.
-	always @(instruction, addxor) begin
-		if (addxor == 1'b1) EXTERN <= instruction[2:0];
-	end
+	assign EXTERN = instruction[2:0];
 
 	datapath_alu _datapath_alu(.alu(alu), .addxor(addxor), .A(A), .bus(bus));
 
-	// Storing on bus.
-	always @(rout, R0, R1, R2, R3, R4, R5, R6, R7, G, A, EXTERN) begin
-		case (rout)
-		_R0: bus <= R0;
-		_R1: bus <= R1;
-		_R2: bus <= R2;
-		_R3: bus <= R3;
-		_R4: bus <= R4;
-		_R5: bus <= R5; 
-		_R6: bus <= R6;
-		_R7: bus <= R7;
-		_G: bus <= G;
-		_A: bus <= A;
-		_EXTERN: bus <= EXTERN;
-		_UNUSED: bus <= 0;
-		endcase
-	end
+	// Loading onto shared bus. Only one at a time please! (So, one-hot encoding is required.)
+	datapath_trin _triR0(.enable(rout[0]), .d(R0), .q(bus));
+	datapath_trin _triR1(.enable(rout[1]), .d(R1), .q(bus));
+	datapath_trin _triR2(.enable(rout[2]), .d(R2), .q(bus));
+	datapath_trin _triR3(.enable(rout[3]), .d(R3), .q(bus));
+	datapath_trin _triR4(.enable(rout[4]), .d(R4), .q(bus));
+	datapath_trin _triR5(.enable(rout[5]), .d(R5), .q(bus));
+	datapath_trin _triR6(.enable(rout[6]), .d(R6), .q(bus));
+	datapath_trin _triR7(.enable(rout[7]), .d(R7), .q(bus));
+	// Bus takes from G, bus takes from A, bus takes from EXTERN, registers.
+	datapath_trin _triG(.enable(rout[8]), .d(G), .q(bus));
+	datapath_trin _triA(.enable(rout[9]), .d(A), .q(bus));
+	datapath_trin _triEXTERN(.enable(rout[10]), .d(EXTERN), .q(bus));
 
-	// Loading from bus.
-	always @(ren, bus, alu) begin
-		case (ren)
-		_R0: R0 <= bus;
-		_R1: R1 <= bus;
-		_R2: R2 <= bus;
-		_R3: R3 <= bus;
-		_R4: R4 <= bus;
-		_R5: R5 <= bus; 
-		_R6: R6 <= bus;
-		_R7: R7 <= bus;
-		_G: G <= alu;
-		_A: A <= bus;
-		_EXTERN: EXTERN <= bus;
-		_UNUSED: bus <= bus;
-		endcase
-	end
+	// Taking from bus. Userland registers take from bus. (For this, one-hot encoding isn't...)
+	datapath_regn _R0(.clock(clock), .enable(ren[0]), .d(bus), .q(R0));
+	datapath_regn _R1(.clock(clock), .enable(ren[1]), .d(bus), .q(R1));
+	datapath_regn _R2(.clock(clock), .enable(ren[2]), .d(bus), .q(R2));
+	datapath_regn _R3(.clock(clock), .enable(ren[3]), .d(bus), .q(R3));
+	datapath_regn _R4(.clock(clock), .enable(ren[4]), .d(bus), .q(R4));
+	datapath_regn _R5(.clock(clock), .enable(ren[5]), .d(bus), .q(R5));
+	datapath_regn _R6(.clock(clock), .enable(ren[6]), .d(bus), .q(R6));
+	datapath_regn _R7(.clock(clock), .enable(ren[7]), .d(bus), .q(R7));
+	// G register takes from alu, A register takes from bus, EXTERN register takes from bus.
+	datapath_regn _G(.clock(clock), .enable(ren[8]), .d(alu), .q(G));
+	datapath_regn _A(.clock(clock), .enable(ren[9]), .d(bus), .q(A));
+	// datapath_regn _EXTERN(.clock(clock), .enable(ren[10]), .d(bus), .q(EXTERN));
 
 	// TEMP. Hard-coding hard-coding program.
 	//
