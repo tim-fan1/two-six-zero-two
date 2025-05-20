@@ -2,8 +2,6 @@ module datapath(clock, resetnot, rout, ren, addxor, instruction, ISR
 	, bus, R0, R1, R2, R3, R4, R5, R6, R7, G, A, EXTERN, alu
 );
 	input clock, resetnot;
-
-	// FIXME: Received from testbench. Should be retrieved from program memory instead.
 	input [7:0] instruction;
 
 	// Received from controller.

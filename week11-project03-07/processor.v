@@ -3,8 +3,6 @@ module processor(clock, resetnot, instruction
 	, R5, R6, R7, G, A, EXTERN, ISR, currstate, nextstate, opcode
 );
 	input clock, resetnot;
-
-	// FIXME: Received from testbench. Should be retrieved from program memory instead.
 	input [7:0] instruction;
 
 	// Internal wires, made visible for debugging.
@@ -19,8 +17,6 @@ module processor(clock, resetnot, instruction
 	datapath _datapath(
 		.clock(clock),
 		.resetnot(resetnot),
-
-		// FIXME: Received from testbench. Should be retrieved from program memory instead.
 		.instruction(instruction),
 
 		// Received from controller.
