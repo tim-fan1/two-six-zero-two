@@ -18,17 +18,20 @@ module processor_testbench();
 		resetnot = 1'b1;
 		#5 resetnot = 1'b0;
 		#5 resetnot = 1'b1;
-		#1500 instruction = 8'b01000001;
-		#1010 instruction = 8'b01001010;
-		#1010 instruction = 8'b01000011;
-		#1010 instruction = 8'b10000001;
-		#1010 instruction = 8'b10000001;
+		#1500 instruction = 8'b01000001; // ldi $0 1
+		#1010 instruction = 8'b01001010; // ldi $1 2
+		#1010 instruction = 8'b01000011; // ldi $0 3
+		#1010 instruction = 8'b10000001; // add $0 $1
+		#1010 instruction = 8'b10000001; // ...
 		#1010 instruction = 8'b10000001;
 		#1010 instruction = 8'b01001100;
-		#1010 instruction = 8'b01010101;
-		#1010 instruction = 8'b10000001;
-		#1010 instruction = 8'b10010000;
-		#1010 instruction = 8'b10010000;
+		#1010 instruction = 8'b01010101; // ...
+		#1010 instruction = 8'b11000001; // xor $0 $1
+		#1010 instruction = 8'b10010000; // add $2 $0
+		#1010 instruction = 8'b10010000; // add $2 $0
+		#1010 instruction = 8'b00011000; // mov $3 $0 // swap($0,$1)
+		#1010 instruction = 8'b00000001; // mov $0 $1 // ...
+		#1010 instruction = 8'b00001011; // mov $1 $3 // ...
 	end
 
 	processor _processor(.clock(clock), .resetnot(resetnot), .instruction(instruction)
