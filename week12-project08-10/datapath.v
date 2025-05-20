@@ -1,10 +1,7 @@
-module datapath(clock, resetnot, rout, ren, addxor, instruction, ISR
+module datapath(clock, resetnot, rout, ren, addxor, ISR
 	, bus, R0, R1, R2, R3, R4, R5, R6, R7, G, A, EXTERN, alu, PCR
 );
 	input clock, resetnot;
-
-	// FIXME: Received from testbench. Should be retrieved from program memory instead.
-	input [7:0] instruction;
 
 	// Received from controller.
 	input addxor;
@@ -16,8 +13,8 @@ module datapath(clock, resetnot, rout, ren, addxor, instruction, ISR
 	// Internal wires, made visible for debugging.
 	output tri [15:0] bus;
 	output wire [15:0] R0, R1, R2, R3, R4, R5, R6, R7, G, A, PCR; // Register outputs.
-	output wire [15:0] EXTERN, alu, PCRincrement; // Combinational inputs/outputs.
-	output wire [15:0] address_rom, q_rom; // Synchronous inputs/outputs.
+	output wire [15:0] EXTERN, alu, PCRincrement; // Combinational outputs.
+	output wire [15:0] q_rom; // Synchronous outputs.
 
 	// Load data onto EXTERN wire. 
 	// FIXME: how to support loading from read-write data memory.
@@ -28,8 +25,9 @@ module datapath(clock, resetnot, rout, ren, addxor, instruction, ISR
 	// Combinational circuit that sums A and bus together, continuously.
 	datapath_alu _datapath_alu(.alu(alu), .addxor(addxor), .A(A), .bus(bus));
 
-	// Sequential circuit that outputs instruction in ROM at address, on posedge clock.
-	ROM _instruction_rom(.clock(clock), .d(address_rom), .q(q_rom));
+	// Combination circuit that outputs instruction in ROM at program counter.
+	// TODO: replace PCR with (PCR | BRANCH_ADDR).
+	ROM _instruction_rom(.d(PCR), .q(q_rom));
 
 	// Loading onto shared bus. Only one at a time please!
 	// (rout is given as a vector where only one bit is on).
@@ -56,7 +54,6 @@ module datapath(clock, resetnot, rout, ren, addxor, instruction, ISR
 	datapath_regn _R7(.clock(clock), .resetnot(resetnot), .enable(ren[7]), .d(bus), .q(R7));
 	datapath_regn _G(.clock(clock), .resetnot(resetnot), .enable(ren[8]), .d(alu), .q(G));
 	datapath_regn _A(.clock(clock), .resetnot(resetnot), .enable(ren[9]), .d(bus), .q(A));
-	datapath_regn _ISR(.clock(clock), .resetnot(resetnot), .enable(ren[11]), .d(instruction), .q(ISR));
-	// datapath_regn _ISR(.clock(clock), .resetnot(resetnot), .enable(ren[11]), .d(q_rom), .q(ISR));
+	datapath_regn _ISR(.clock(clock), .resetnot(resetnot), .enable(ren[11]), .d(q_rom), .q(ISR));
 	datapath_regn _PCR(.clock(clock), .resetnot(resetnot), .enable(ren[12]), .d(PCRincrement), .q(PCR));
 endmodule

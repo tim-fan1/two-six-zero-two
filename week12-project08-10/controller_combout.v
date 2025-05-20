@@ -7,6 +7,7 @@ module controller_combout(currstate, ISR, rout, ren, addxor);
 		EXEC_AX3 = 4'b0100,
 		EXEC_L = 4'b0101, // Load.
 		EXEC_M = 4'b0110, // Move.
+		INCREMENT = 4'b0111, // Increment PCR.
 		ERROR = 4'b1111; // UNUSED.
 	parameter [1:0]
 		MOVE = 2'b00, // Opcodes.
@@ -42,6 +43,7 @@ module controller_combout(currstate, ISR, rout, ren, addxor);
 		EXEC_AX3: _ren <= { 1'b0, ISR[5:3] }; // RXin.
 		EXEC_L: _ren <= { 1'b0, ISR[5:3] }; // RXin.
 		EXEC_M: _ren <= { 1'b0, ISR[5:3] }; // RXin.
+		INCREMENT: _ren <= 4'b1100; // PCRen.
 		default: _ren <= 4'b1111;
 		endcase
 	end

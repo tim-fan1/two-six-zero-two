@@ -16,7 +16,6 @@ module processor_hardware(SW, KEY, HEX0, HEX1, HEX2, HEX3
 	processor _processor(
 		.clock(KEY[0]),
 		.resetnot(KEY[1]),
-		.instruction(SW[9:2]),
 		.R0(R0),
 		.R1(R1),
 		.R2(R2),

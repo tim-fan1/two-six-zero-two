@@ -1,27 +1,21 @@
-module processor(clock, resetnot, instruction
+module processor(clock, resetnot
 	, addxor, rout, ren, bus, R0, R1, R2, R3, R4
-	, R5, R6, R7, G, A, EXTERN, ISR, currstate, nextstate, opcode
+	, R5, R6, R7, G, A, EXTERN, ISR, PCR, currstate, nextstate, opcode
 );
 	input clock, resetnot;
-
-	// FIXME: Received from testbench. Should be retrieved from program memory instead.
-	input [7:0] instruction;
 
 	// Internal wires, made visible for debugging.
 	output wire [15:0] rout, ren;
 	output wire addxor;
 	output wire [15:0]
 		bus, R0, R1, R2, R3, R4,
-		R5, R6, R7, G, A, EXTERN, ISR;
+		R5, R6, R7, G, A, EXTERN, ISR, PCR;
 	output wire [3:0] currstate, nextstate;
 	output wire [1:0] opcode;
 
 	datapath _datapath(
 		.clock(clock),
 		.resetnot(resetnot),
-
-		// FIXME: Received from testbench. Should be retrieved from program memory instead.
-		.instruction(instruction),
 
 		// Received from controller.
 		.rout(rout),
@@ -43,7 +37,8 @@ module processor(clock, resetnot, instruction
 		.R7(R7),
 		.G(G),
 		.A(A),
-		.EXTERN(EXTERN)
+		.EXTERN(EXTERN),
+		.PCR(PCR)
 	);
 
 	controller _controller(
