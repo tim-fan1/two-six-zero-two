@@ -1,15 +1,22 @@
 module datapath(clock, resetnot, rout, ren, addxor, instruction, ISR
 	, bus, R0, R1, R2, R3, R4, R5, R6, R7, G, A, EXTERN, alu
 );
-	input clock, resetnot, addxor;
-	input [15:0] rout, ren;
+	input clock, resetnot;
+
+	// FIXME: Received from testbench. Should be retrieved from program memory instead.
 	input [7:0] instruction;
 
-	// The rest are internal wires, made viewable for debugging.
+	// Received from controller.
+	input addxor;
+	input [15:0] rout, ren;
+
+	// Send to controller.
+	output [7:0] ISR;
+
+	// Internal wires, made visible for debugging.
 	output tri [15:0] bus; 
 	output wire [15:0] R0, R1, R2, R3, R4, R5, R6, R7, G, A, EXTERN;
 	output wire [15:0] alu;
-	output wire [7:0] ISR;
 
 	// Load data onto EXTERN wire.
 	assign EXTERN = ISR[2:0];
