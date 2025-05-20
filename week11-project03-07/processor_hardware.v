@@ -1,16 +1,17 @@
 module processor_hardware(SW, KEY, HEX0, HEX1, HEX2, HEX3
+	/* Internal wires made visible for debugging.	
 	, R0, R1, R2, R3, R4,
-		R5, R6, R7, ISR, currstate
+	  R5, R6, R7, ISR, currstate. */
 );
 	input [9:2] SW;
 	input [1:0] KEY;
 	output [6:0] HEX0, HEX1, HEX2, HEX3;
 
-	output wire [15:0] 
+	/* output */ wire [15:0] 
 		R0, R1, R2, R3, R4,
 		R5, R6, R7, ISR;
 
-	output wire [3:0] currstate;
+	/* output */ wire [3:0] currstate;
 
 	processor _processor(
 		.clock(KEY[0]),
