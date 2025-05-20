@@ -1,6 +1,5 @@
 module processor(clock, resetnot, instruction
-	, addxor, rout, ren
-	, bus, R0, R1, R2, R3, R4
+	, addxor, rout, ren, bus, R0, R1, R2, R3, R4
 	, R5, R6, R7, G, A, EXTERN, ISR, currstate, nextstate, opcode
 );
 	input clock, resetnot;
