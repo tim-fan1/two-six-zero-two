@@ -1,4 +1,4 @@
-module controller_combnext(currstate, nextstate, instruction);
+module controller_combnext(currstate, nextstate, ISR, opcode);
 	parameter [3:0] 
 		FETCH = 4'b0000, // State assignments.
 		DECODE = 4'b0001,
@@ -14,13 +14,13 @@ module controller_combnext(currstate, nextstate, instruction);
 		ADD = 2'b10,
 		XOR = 2'b11;
 	input [3:0] currstate;
-	input [7:0] instruction;
+	input [7:0] ISR;
 	output reg [3:0] nextstate;
 
-	wire [1:0] opcode;
-	assign opcode = instruction[7:6];
+	output [1:0] opcode;
+	assign opcode = ISR[7:6];
 
-	always @(currstate) begin
+	always @(currstate, ISR) begin
 		case (currstate)
 		FETCH: nextstate <= DECODE;
 		DECODE: nextstate <= (opcode == MOVE) ? EXEC_M : // What operation to execute?

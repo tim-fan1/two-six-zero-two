@@ -1,19 +1,18 @@
-module datapath(clock, resetnot, rout, ren, addxor, increment, instruction
+module datapath(clock, resetnot, rout, ren, addxor, instruction, ISR
 	, bus, R0, R1, R2, R3, R4, R5, R6, R7, G, A, EXTERN, alu
 );
-	input clock, resetnot, addxor, increment;
+	input clock, resetnot, addxor;
 	input [15:0] rout, ren;
-
-	// The only signal to send to controller.
-	output reg [7:0] instruction;
+	input [7:0] instruction;
 
 	// The rest are internal wires, made viewable for debugging.
 	output tri [15:0] bus; 
 	output wire [15:0] R0, R1, R2, R3, R4, R5, R6, R7, G, A, EXTERN;
 	output wire [15:0] alu;
+	output wire [7:0] ISR;
 
 	// Load data onto EXTERN wire.
-	assign EXTERN = instruction[2:0];
+	assign EXTERN = ISR[2:0];
 
 	datapath_alu _datapath_alu(.alu(alu), .addxor(addxor), .A(A), .bus(bus));
 
@@ -44,53 +43,5 @@ module datapath(clock, resetnot, rout, ren, addxor, increment, instruction
 	datapath_regn _G(.clock(clock), .enable(ren[8]), .d(alu), .q(G));
 	datapath_regn _A(.clock(clock), .enable(ren[9]), .d(bus), .q(A));
 	// datapath_regn _EXTERN(.clock(clock), .enable(ren[10]), .d(bus), .q(EXTERN));
-
-	// TEMP. Hard-coding hard-coding program.
-	//
-	// Program counter.
-	reg [8:0] program_counter;
-	initial program_counter = ~0; // Start at end, so that on first
-	                              // posedge, loops back to start.
-	always @(posedge increment)
-		program_counter <= program_counter + 1;
-
-	// Instruction memory.
-	always @(program_counter) begin
-		case (program_counter)
-		0: instruction <= 8'b01000001; // load $0 001
-		1: instruction <= 8'b01001011; // load $1 011
-		2: instruction <= 8'b01010111; // load $2 111
-		3: instruction <= 8'b01011011; // load $3 011
-		4: instruction <= 8'b01100111; // load $4 111
-		5: instruction <= 8'b01101101; // load $5 101
-		6: instruction <= 8'b01110001; // load $6 001
-		7: instruction <= 8'b01111100; // load $7 100
-		8: instruction <= 8'b10000001; // ...
-		9: instruction <= 8'b10000001; // ...
-		10: instruction <= 8'b10000001;
-		11: instruction <= 8'b10000001;
-		12: instruction <= 8'b10000001;
-		13: instruction <= 8'b10000001;
-		14: instruction <= 8'b10000001;
-		15: instruction <= 8'b10000001;
-		16: instruction <= 8'b10000001;
-		17: instruction <= 8'b10000001;
-		18: instruction <= 8'b10000001;
-		19: instruction <= 8'b10000001;
-		20: instruction <= 8'b10000001;
-		21: instruction <= 8'b10000001;
-		22: instruction <= 8'b10000001;
-		23: instruction <= 8'b10000001;
-		24: instruction <= 8'b10000001;
-		25: instruction <= 8'b10000001;
-		26: instruction <= 8'b10000001;
-		27: instruction <= 8'b10000001;
-		28: instruction <= 8'b10000001;
-		29: instruction <= 8'b10000001;
-		30: instruction <= 8'b10000001;
-		31: instruction <= 8'b10000001;
-		default: instruction <= 8'b00000000; // essentially nop, 
-		                                     // move r0 to r0.
-		endcase
-	end
+	datapath_regn _ISR(.clock(clock), .enable(ren[11]), .d(instruction), .q(ISR));
 endmodule
