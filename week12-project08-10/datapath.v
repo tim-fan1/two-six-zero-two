@@ -1,5 +1,5 @@
 module datapath(clock, resetnot, rout, ren, addxor, ISR
-	, bus, R0, R1, R2, R3, R4, R5, R6, R7, G, A, EXTERN, alu, PCR
+	, bus, R0, R1, R2, R3, R4, R5, R6, R7, G, A, EXTERN, alu, PCR, q_rom
 );
 	input clock, resetnot;
 
@@ -25,9 +25,10 @@ module datapath(clock, resetnot, rout, ren, addxor, ISR
 	// Combinational circuit that sums A and bus together, continuously.
 	datapath_alu _datapath_alu(.alu(alu), .addxor(addxor), .A(A), .bus(bus));
 
-	// Combination circuit that outputs instruction in ROM at program counter.
-	// TODO: replace PCR with (PCR | BRANCH_ADDR).
-	ROM _instruction_rom(.d(PCR), .q(q_rom));
+	// Sequential circuit that updates output on posedge clock, 
+	// with instruction in ROM at program counter, if enabled.
+	// TODO: replace PCR with (PCR || BRANCH_ADDR).
+	ROM _instruction_rom(.clock(clock), .enable(ren[13]), .d(PCR), .q(q_rom));
 
 	// Loading onto shared bus. Only one at a time please!
 	// (rout is given as a vector where only one bit is on).

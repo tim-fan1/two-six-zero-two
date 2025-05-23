@@ -1,13 +1,14 @@
 module controller_combnext(currstate, nextstate, ISR, opcode);
 	parameter [3:0] 
-		FETCH = 4'b0000, // Update ISR.
-		DECODE = 4'b0001,
-		EXEC_AX1 = 4'b0010, // Add/Xor.
-		EXEC_AX2 = 4'b0011,
-		EXEC_AX3 = 4'b0100,
-		EXEC_L = 4'b0101, // Load.
-		EXEC_M = 4'b0110, // Move.
-		INCREMENT = 4'b0111, // Increment PCR.
+		PRE_FETCH = 4'b0000, // Enable ROM output, instruction at PCR.
+		FETCH = 4'b0001, // Update ISR with ROM output.
+		DECODE = 4'b0010, // Decode instruction in ISR.
+		EXEC_AX1 = 4'b0011, // Is it Add/Xor?
+		EXEC_AX2 = 4'b0100,
+		EXEC_AX3 = 4'b0101,
+		EXEC_L = 4'b0110, // Is it Load?
+		EXEC_M = 4'b0111, // Is it Move?
+		INCREMENT = 4'b1000, // Increment PCR.
 		ERROR = 4'b1111; // UNUSED.
 	parameter [1:0]
 		MOVE = 2'b00, // Opcodes.
@@ -23,6 +24,7 @@ module controller_combnext(currstate, nextstate, ISR, opcode);
 
 	always @(currstate, ISR) begin
 		case (currstate)
+		PRE_FETCH: nextstate <= FETCH;
 		FETCH: nextstate <= DECODE;
 		DECODE: nextstate <= (opcode == MOVE) ? EXEC_M : // What operation to execute?
 		                     (opcode == LOAD) ? EXEC_L : 
@@ -34,7 +36,7 @@ module controller_combnext(currstate, nextstate, ISR, opcode);
 		EXEC_AX3: nextstate <= INCREMENT;
 		EXEC_L: nextstate <= INCREMENT;
 		EXEC_M: nextstate <= INCREMENT;
-		INCREMENT: nextstate <= FETCH;
+		INCREMENT: nextstate <= PRE_FETCH;
 		default: nextstate <= ERROR;
 		endcase
 	end

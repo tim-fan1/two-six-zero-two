@@ -1,6 +1,6 @@
 module processor(clock, resetnot
 	, addxor, rout, ren, bus, R0, R1, R2, R3, R4
-	, R5, R6, R7, G, A, EXTERN, ISR, PCR, currstate, nextstate, opcode
+	, R5, R6, R7, G, A, EXTERN, ISR, PCR, q_rom, currstate, nextstate, opcode
 );
 	input clock, resetnot;
 
@@ -9,7 +9,7 @@ module processor(clock, resetnot
 	output wire addxor;
 	output wire [15:0]
 		bus, R0, R1, R2, R3, R4,
-		R5, R6, R7, G, A, EXTERN, ISR, PCR;
+		R5, R6, R7, G, A, EXTERN, ISR, PCR, q_rom;
 	output wire [3:0] currstate, nextstate;
 	output wire [1:0] opcode;
 
@@ -38,7 +38,8 @@ module processor(clock, resetnot
 		.G(G),
 		.A(A),
 		.EXTERN(EXTERN),
-		.PCR(PCR)
+		.PCR(PCR),
+		.q_rom(q_rom)
 	);
 
 	controller _controller(

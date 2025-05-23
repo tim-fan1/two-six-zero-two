@@ -1,13 +1,14 @@
 module controller_combout(currstate, ISR, rout, ren, addxor);
 	parameter [3:0] 
-		FETCH = 4'b0000, // State assignments.
-		DECODE = 4'b0001,
-		EXEC_AX1 = 4'b0010, // Add/Xor.
-		EXEC_AX2 = 4'b0011,
-		EXEC_AX3 = 4'b0100,
-		EXEC_L = 4'b0101, // Load.
-		EXEC_M = 4'b0110, // Move.
-		INCREMENT = 4'b0111, // Increment PCR.
+		PRE_FETCH = 4'b0000, // Load q_rom.
+		FETCH = 4'b0001, // Update ISR.
+		DECODE = 4'b0010,
+		EXEC_AX1 = 4'b0011, // Add/Xor.
+		EXEC_AX2 = 4'b0100,
+		EXEC_AX3 = 4'b0101,
+		EXEC_L = 4'b0110, // Load.
+		EXEC_M = 4'b0111, // Move.
+		INCREMENT = 4'b1000, // Increment PCR.
 		ERROR = 4'b1111; // UNUSED.
 	parameter [1:0]
 		MOVE = 2'b00, // Opcodes.
@@ -37,6 +38,7 @@ module controller_combout(currstate, ISR, rout, ren, addxor);
 	end
 	always @(currstate) begin
 		case (currstate)
+		PRE_FETCH: _ren <= 4'b1101; // qROMen.
 		FETCH: _ren <= 4'b1011; // ISRen.
 		EXEC_AX1: _ren <= 4'b1001; // Aen.
 		EXEC_AX2: _ren <= 4'b1000; // Gen.
