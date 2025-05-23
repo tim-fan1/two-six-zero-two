@@ -18,12 +18,22 @@ module processor_testbench();
 		#5 resetnot = 1'b1;
 	end
 
-	processor _processor(.clock(clock), .resetnot(resetnot)
-		, .addxor(addxor), .rout(rout), .ren(ren)
-		, .bus(bus), .R0(R0), .R1(R1), .R2(R2), .R3(R3), .R4(R4)
-		, .R5(R5), .R6(R6), .R7(R7), .G(G), .A(A), .EXTERN(EXTERN), .ISR(ISR)
-		, .PCR(PCR), .q_rom(q_rom), .currstate(currstate), .nextstate(nextstate), .opcode(opcode)
-	);
+	/* For testing module. */
+	// processor _processor(.clock(clock), .resetnot(resetnot)
+	// 	, .addxor(addxor), .rout(rout), .ren(ren)
+	// 	, .bus(bus), .R0(R0), .R1(R1), .R2(R2), .R3(R3), .R4(R4)
+	// 	, .R5(R5), .R6(R6), .R7(R7), .G(G), .A(A), .EXTERN(EXTERN), .ISR(ISR)
+	// 	, .PCR(PCR), .q_rom(q_rom), .currstate(currstate), .nextstate(nextstate), .opcode(opcode)
+	// );
+
+	/* For testing hardware. */
+	wire [1:0] KEY;
+	wire [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
+	assign KEY[0] = clock;
+	assign KEY[1] = resetnot;
+	processor_hardware _processor_hardware(.KEY(KEY), 
+	                                       .HEX0(HEX0), .HEX1(HEX1), .HEX2(HEX2), 
+	                                       .HEX3(HEX3), .HEX4(HEX4), .HEX5(HEX5));
 	initial begin
 		$dumpfile("processor_testbench.vcd");
 		$dumpvars(0, processor_testbench);

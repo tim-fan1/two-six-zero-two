@@ -1,11 +1,11 @@
-module processor_hardware(SW, KEY, HEX0, HEX1, HEX2, HEX3
+module processor_hardware(SW, KEY, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5
 	/* Internal wires made visible for debugging.	
 	, R0, R1, R2, R3, R4,
 	  R5, R6, R7, ISR, currstate. */
 );
 	input [9:2] SW;
 	input [1:0] KEY;
-	output [6:0] HEX0, HEX1, HEX2, HEX3;
+	output [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
 
 	/* output */ wire [15:0] 
 		R0, R1, R2, R3, R4,
@@ -45,6 +45,8 @@ module processor_hardware(SW, KEY, HEX0, HEX1, HEX2, HEX3
 		endcase
 	end
 
+	currstate_to_sevenseg_decoder_left _HEX5(.d(currstate), .q(HEX5));
+	currstate_to_sevenseg_decoder_right _HEX4(.d(currstate), .q(HEX4));
 	hex_to_sevenseg_decoder _HEX3(.d(currvalue[15:12]), .q(HEX3));
 	hex_to_sevenseg_decoder _HEX2(.d(currvalue[11:8]), .q(HEX2));
 	hex_to_sevenseg_decoder _HEX1(.d(currvalue[7:4]), .q(HEX1));
