@@ -20,12 +20,12 @@ module processor(clock, resetnot
 		// Received from controller.
 		.rout(rout),
 		.ren(ren),
-		.addxor(addxor),
 
 		// Send to controller the next instruction.
 		.ISR(ISR),
 
 		// Internal wires, made visible for debugging.
+		.addxor(addxor),
 		.bus(bus),
 		.R0(R0),
 		.R1(R1),
@@ -52,7 +52,6 @@ module processor(clock, resetnot
 		// Send to datapath.
 		.rout(rout),
 		.ren(ren),
-		.addxor(addxor),
 
 		// Internal wires, made visible for debugging.
 		.currstate(currstate),

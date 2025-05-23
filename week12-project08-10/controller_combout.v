@@ -1,4 +1,4 @@
-module controller_combout(currstate, ISR, rout, ren, addxor);
+module controller_combout(currstate, ISR, rout, ren);
 	parameter [3:0] 
 		PRE_FETCH = 4'b0000, // Load q_rom.
 		FETCH = 4'b0001, // Update ISR.
@@ -18,7 +18,6 @@ module controller_combout(currstate, ISR, rout, ren, addxor);
 	input [3:0] currstate;
 	input [7:0] ISR;
 	output [15:0] rout, ren;
-	output addxor;
 
 	reg [3:0] _rout, _ren;
 
@@ -53,7 +52,4 @@ module controller_combout(currstate, ISR, rout, ren, addxor);
 	// Receive signals and output onehot encoding.
 	controller_onehotdecoder _rout_onehot(.d(_rout), .q(rout));
 	controller_onehotdecoder _ren_onehot(.d(_ren), .q(ren));
-
-	// Output addxor.
-	assign addxor = opcode[0];
 endmodule

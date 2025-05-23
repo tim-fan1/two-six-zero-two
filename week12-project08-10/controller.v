@@ -1,4 +1,4 @@
-module controller(clock, resetnot, ISR, rout, ren, addxor, currstate, nextstate, opcode);
+module controller(clock, resetnot, ISR, rout, ren, currstate, nextstate, opcode);
 	input clock, resetnot;
 
 	// Received from datapath.
@@ -6,7 +6,6 @@ module controller(clock, resetnot, ISR, rout, ren, addxor, currstate, nextstate,
 
 	// Send to datapath.
 	output [15:0] rout, ren;
-	output addxor;
 
 	// Internal wires, made visible for debugging.
 	output wire [1:0] opcode;
@@ -24,8 +23,7 @@ module controller(clock, resetnot, ISR, rout, ren, addxor, currstate, nextstate,
 		.ISR(ISR), 
 
 		.rout(rout), 
-		.ren(ren),
-		.addxor(addxor)
+		.ren(ren)
 	);
 	controller_regstate regstate(
 		.d(nextstate), 

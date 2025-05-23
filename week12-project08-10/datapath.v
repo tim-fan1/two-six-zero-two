@@ -4,13 +4,13 @@ module datapath(clock, resetnot, rout, ren, addxor, ISR
 	input clock, resetnot;
 
 	// Received from controller.
-	input addxor;
 	input [15:0] rout, ren;
 
 	// Send to controller.
 	output [7:0] ISR;
 
 	// Internal wires, made visible for debugging.
+	output wire addxor;
 	output tri [15:0] bus;
 	output wire [15:0] R0, R1, R2, R3, R4, R5, R6, R7, G, A, PCR; // Register outputs.
 	output wire [15:0] EXTERN, alu, PCRincrement; // Combinational outputs.
@@ -21,6 +21,7 @@ module datapath(clock, resetnot, rout, ren, addxor, ISR
 	// maybe, assign EXTERN = q_ram, where q_ram is word at read_address_ram in data memory.
 	assign EXTERN = ISR[2:0];
 	assign PCRincrement = PCR + 1;
+	assign addxor = ISR[6];
 
 	// Combinational circuit that sums A and bus together, continuously.
 	datapath_alu _datapath_alu(.alu(alu), .addxor(addxor), .A(A), .bus(bus));
